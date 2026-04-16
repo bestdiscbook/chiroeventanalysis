@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Request Received — Concierge Coaches</title>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800;900&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --red: #e63946;
+      --dark-red: #c1121f;
+      --navy: #0d1117;
+      --navy-light: #21262d;
+      --white: #ffffff;
+      --grey: #8b949e;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Barlow', sans-serif;
+      background: var(--navy);
+      color: var(--white);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 24px;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 700px;
+      height: 700px;
+      background: radial-gradient(circle, rgba(230,57,70,0.14) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .card {
+      background: var(--navy-light);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 20px;
+      padding: 60px 48px;
+      max-width: 580px;
+      width: 100%;
+      text-align: center;
+      position: relative;
+      z-index: 1;
+      animation: fadeUp 0.5s ease both;
+    }
+
+    .check {
+      width: 64px;
+      height: 64px;
+      background: var(--red);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 28px;
+      font-size: 28px;
+      animation: popIn 0.4s ease 0.2s both;
+    }
+
+    .eyebrow {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 3.5px;
+      text-transform: uppercase;
+      color: var(--red);
+      margin-bottom: 12px;
+    }
+
+    h1 {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: clamp(36px, 6vw, 52px);
+      font-weight: 900;
+      text-transform: uppercase;
+      line-height: 1.0;
+      letter-spacing: -0.5px;
+      margin-bottom: 16px;
+    }
+
+    p {
+      font-size: 16px;
+      color: #adb5bd;
+      line-height: 1.7;
+      margin-bottom: 36px;
+    }
+
+    p strong { color: var(--white); font-weight: 600; }
+
+    .divider {
+      width: 40px;
+      height: 2px;
+      background: var(--red);
+      margin: 0 auto 32px;
+    }
+
+    .next-steps {
+      text-align: left;
+      background: rgba(255,255,255,0.04);
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 36px;
+    }
+
+    .next-steps h3 {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--grey);
+      margin-bottom: 16px;
+    }
+
+    .step {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      margin-bottom: 14px;
+    }
+
+    .step:last-child { margin-bottom: 0; }
+
+    .step-num {
+      width: 24px;
+      height: 24px;
+      background: var(--red);
+      border-radius: 50%;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 13px;
+      font-weight: 800;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    .step-text {
+      font-size: 14px;
+      color: #cdd9e5;
+      line-height: 1.5;
+    }
+
+    .cta-link {
+      display: inline-block;
+      padding: 14px 32px;
+      background: var(--red);
+      color: white;
+      border-radius: 8px;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 16px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      text-decoration: none;
+      transition: background 0.2s;
+    }
+
+    .cta-link:hover { background: var(--dark-red); }
+
+    .cta-sub {
+      font-size: 12px;
+      color: var(--grey);
+      margin-top: 12px;
+      margin-bottom: 0;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes popIn {
+      from { opacity: 0; transform: scale(0.6); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    @media (max-width: 480px) {
+      .card { padding: 40px 24px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="card">
+    <div class="check">&#10003;</div>
+    <div class="eyebrow">Request Received</div>
+    <h1>You're All Set.</h1>
+    <p>
+      <strong>Dr. Kaplan or Dr. Bard will be in touch shortly</strong> to confirm a time for your complimentary decompression program analysis.
+    </p>
+
+    <div class="divider"></div>
+
+    <div class="next-steps">
+      <h3>What Happens Next</h3>
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-text">Check your inbox — you'll receive a confirmation email with details about your call.</div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-text">A member of our team will reach out within 1 business day to schedule your session.</div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-text">On the call, Dr. Kaplan or Dr. Bard will personally review your program and walk you through specific recommendations.</div>
+      </div>
+    </div>
+
+    <a href="https://thechiroevent.com" class="cta-link">Learn About The Chiro Event &rarr;</a>
+    <p class="cta-sub">April 18 &middot; Trump National, Jupiter FL &middot; Limited seats remaining</p>
+  </div>
+
+</body>
+</html>

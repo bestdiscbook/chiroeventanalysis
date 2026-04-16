@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Free Decompression Program Analysis — Concierge Coaches</title>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800;900&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --red: #e63946;
+      --dark-red: #c1121f;
+      --navy: #0d1117;
+      --navy-mid: #161b22;
+      --navy-light: #21262d;
+      --white: #ffffff;
+      --grey: #8b949e;
+      --light: #f0f2f5;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Barlow', sans-serif;
+      background: var(--navy);
+      color: var(--white);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ── NOISE TEXTURE ── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.4;
+    }
+
+    /* ── HERO ── */
+    .hero {
+      position: relative;
+      padding: 80px 24px 60px;
+      text-align: center;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -120px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 700px;
+      height: 700px;
+      background: radial-gradient(circle, rgba(230,57,70,0.18) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .eyebrow {
+      display: inline-block;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: var(--red);
+      border: 1px solid rgba(230,57,70,0.4);
+      padding: 6px 16px;
+      border-radius: 2px;
+      margin-bottom: 28px;
+      animation: fadeUp 0.5s ease both;
+    }
+
+    .hero-headline {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: clamp(42px, 7vw, 80px);
+      font-weight: 900;
+      line-height: 0.95;
+      letter-spacing: -1px;
+      text-transform: uppercase;
+      margin-bottom: 24px;
+      animation: fadeUp 0.5s ease 0.1s both;
+    }
+
+    .hero-headline em {
+      font-style: normal;
+      color: var(--red);
+      display: block;
+    }
+
+    .hero-sub {
+      font-size: clamp(16px, 2.5vw, 20px);
+      font-weight: 400;
+      color: #adb5bd;
+      max-width: 580px;
+      margin: 0 auto 20px;
+      line-height: 1.6;
+      animation: fadeUp 0.5s ease 0.2s both;
+    }
+
+    .hero-sub strong {
+      color: var(--white);
+      font-weight: 600;
+    }
+
+    /* ── PROOF BAR ── */
+    .proof-bar {
+      display: flex;
+      justify-content: center;
+      gap: 40px;
+      flex-wrap: wrap;
+      padding: 28px 24px;
+      border-top: 1px solid rgba(255,255,255,0.07);
+      border-bottom: 1px solid rgba(255,255,255,0.07);
+      margin-bottom: 0;
+      animation: fadeUp 0.5s ease 0.3s both;
+    }
+
+    .proof-item {
+      text-align: center;
+    }
+
+    .proof-number {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 36px;
+      font-weight: 900;
+      color: var(--red);
+      line-height: 1;
+    }
+
+    .proof-label {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--grey);
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      margin-top: 4px;
+    }
+
+    /* ── MAIN LAYOUT ── */
+    .main {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0;
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 60px 24px 80px;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ── LEFT COLUMN ── */
+    .left {
+      padding-right: 60px;
+    }
+
+    .section-label {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--red);
+      margin-bottom: 16px;
+    }
+
+    .left h2 {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: clamp(28px, 3vw, 38px);
+      font-weight: 800;
+      text-transform: uppercase;
+      line-height: 1.1;
+      margin-bottom: 20px;
+      letter-spacing: -0.5px;
+    }
+
+    .left p {
+      font-size: 15px;
+      color: #adb5bd;
+      line-height: 1.7;
+      margin-bottom: 32px;
+    }
+
+    .benefits {
+      list-style: none;
+      margin-bottom: 40px;
+    }
+
+    .benefits li {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 14px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      font-size: 15px;
+      color: #cdd9e5;
+      line-height: 1.5;
+    }
+
+    .benefits li:last-child { border-bottom: none; }
+
+    .benefit-icon {
+      width: 22px;
+      height: 22px;
+      background: var(--red);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 1px;
+      font-size: 12px;
+      font-weight: 900;
+      color: white;
+    }
+
+    /* ── SPEAKER CARD ── */
+    .speaker-card {
+      background: var(--navy-light);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 12px;
+      padding: 24px;
+      margin-top: 8px;
+    }
+
+    .speaker-card-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--grey);
+      margin-bottom: 10px;
+    }
+
+    .speaker-name {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--red);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 8px;
+    }
+
+    .speaker-creds {
+      font-size: 12px;
+      color: var(--grey);
+      line-height: 1.7;
+    }
+
+    /* ── RIGHT COLUMN / FORM ── */
+    .right {
+      position: relative;
+    }
+
+    .form-card {
+      background: var(--white);
+      border-radius: 16px;
+      padding: 40px 36px;
+      position: sticky;
+      top: 24px;
+      box-shadow: 0 24px 80px rgba(0,0,0,0.5);
+    }
+
+    .form-card-label {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--red);
+      margin-bottom: 10px;
+    }
+
+    .form-card h3 {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 28px;
+      font-weight: 900;
+      text-transform: uppercase;
+      color: var(--navy);
+      line-height: 1.1;
+      margin-bottom: 6px;
+      letter-spacing: -0.5px;
+    }
+
+    .form-card p {
+      font-size: 13px;
+      color: #6c757d;
+      margin-bottom: 28px;
+      line-height: 1.5;
+    }
+
+    .form-group {
+      margin-bottom: 16px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 12px;
+      font-weight: 600;
+      color: #495057;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      margin-bottom: 6px;
+    }
+
+    .form-group input,
+    .form-group select {
+      width: 100%;
+      padding: 12px 14px;
+      border: 1.5px solid #dee2e6;
+      border-radius: 8px;
+      font-family: 'Barlow', sans-serif;
+      font-size: 15px;
+      color: var(--navy);
+      background: #ffffff;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      outline: none;
+      appearance: none;
+      -webkit-appearance: none;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus {
+      border-color: var(--red);
+      box-shadow: 0 0 0 3px rgba(230,57,70,0.12);
+    }
+
+    .form-group input::placeholder { color: #adb5bd; }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .submit-btn {
+      width: 100%;
+      padding: 16px;
+      background: var(--red);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 18px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      cursor: pointer;
+      margin-top: 8px;
+      transition: background 0.2s, transform 0.1s;
+    }
+
+    .submit-btn:hover { background: var(--dark-red); }
+    .submit-btn:active { transform: scale(0.99); }
+
+    .form-disclaimer {
+      font-size: 11px;
+      color: #adb5bd;
+      text-align: center;
+      margin-top: 12px;
+      line-height: 1.5;
+    }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── MOBILE ── */
+    @media (max-width: 768px) {
+      .hero { padding: 60px 20px 40px; }
+      .proof-bar { gap: 24px; }
+      .proof-number { font-size: 28px; }
+
+      .main {
+        grid-template-columns: 1fr;
+        padding: 40px 20px 60px;
+      }
+
+      .left { padding-right: 0; margin-bottom: 40px; }
+
+      .form-card {
+        padding: 28px 20px;
+        position: static;
+      }
+
+      .form-row { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="eyebrow">Complimentary · No Obligation</div>
+    <h1 class="hero-headline">
+      Is Your Decompression Program<br>
+      <em>Actually Performing?</em>
+    </h1>
+    <p class="hero-sub">
+      Most chiropractors are either not offering decompression, or <strong>leaving significant revenue on the table</strong> with the program they have. Find out where you stand in 30 minutes.
+    </p>
+  </section>
+
+  <!-- PROOF BAR -->
+  <div class="proof-bar">
+    <div class="proof-item">
+      <div class="proof-number">75+</div>
+      <div class="proof-label">Years Combined Experience</div>
+    </div>
+    <div class="proof-item">
+      <div class="proof-number">1,000+</div>
+      <div class="proof-label">Practices Advised</div>
+    </div>
+    <div class="proof-item">
+      <div class="proof-number">30 Min</div>
+      <div class="proof-label">Call — No Fluff</div>
+    </div>
+    <div class="proof-item">
+      <div class="proof-number">$0</div>
+      <div class="proof-label">Cost to You</div>
+    </div>
+  </div>
+
+  <!-- MAIN -->
+  <div class="main">
+
+    <!-- LEFT -->
+    <div class="left">
+      <div class="section-label">What You'll Get</div>
+      <h2>A Direct Look at<br>Your Program's<br>Revenue Potential</h2>
+      <p>Dr. Kaplan and Dr. Bard will personally review your current decompression setup and walk you through exactly what's working, what's not, and what to do about it.</p>
+
+      <ul class="benefits">
+        <li>
+          <span class="benefit-icon">&#10003;</span>
+          A direct audit of your existing program from two of the leading decompression specialists in the country
+        </li>
+        <li>
+          <span class="benefit-icon">&#10003;</span>
+          Specific recommendations to increase case volume — whether you're just starting or already running a program
+        </li>
+        <li>
+          <span class="benefit-icon">&#10003;</span>
+          Practice growth strategies tailored to your market and patient base
+        </li>
+        <li>
+          <span class="benefit-icon">&#10003;</span>
+          Honest feedback on where your program stands — and a clear path forward
+        </li>
+      </ul>
+
+      <div class="speaker-card">
+        <div class="speaker-card-label">Who You're Speaking With</div>
+        <div class="speaker-name">Dr. Eric Kaplan, D.C. &amp; Dr. Perry Bard, D.C.</div>
+        <div class="speaker-creds">
+          Creators of DISC Centers of America &middot; Creators of The National Spinal Decompression Certification<br>
+          75+ Years Combined Experience &middot; Best-Selling Authors &middot; Former Nutrisystem President &amp; COO
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT / FORM -->
+    <div class="right">
+      <div class="form-card">
+        <div class="form-card-label">Request Your Analysis</div>
+        <h3>Get My Decompression<br>Program Analysis</h3>
+        <p>Takes 2 minutes. We'll reach out to confirm a time that works for you.</p>
+
+        <form id="analysisForm" action="https://conciergecoaches.wufoo.com/forms/q2ft3no0xv01sl/" method="POST" target="_blank">
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="firstName">First Name</label>
+              <input type="text" id="firstName" name="firstName" placeholder="John" required />
+            </div>
+            <div class="form-group">
+              <label for="lastName">Last Name</label>
+              <input type="text" id="lastName" name="lastName" placeholder="Smith" required />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="email">Email Address</label>
+            <input type="email" id="email" name="email" placeholder="dr.smith@yourpractice.com" required />
+          </div>
+
+          <div class="form-group">
+            <label for="phone">Phone Number</label>
+            <input type="tel" id="phone" name="phone" placeholder="(555) 000-0000" required />
+          </div>
+
+          <div class="form-group">
+            <label for="practice">Practice Name</label>
+            <input type="text" id="practice" name="practice" placeholder="Smith Chiropractic" required />
+          </div>
+
+          <div class="form-group">
+            <label for="state">Practice State</label>
+            <select id="state" name="state" required>
+              <option value="" disabled selected>Select your state</option>
+              <option>Alabama</option><option>Alaska</option><option>Arizona</option><option>Arkansas</option>
+              <option>California</option><option>Colorado</option><option>Connecticut</option><option>Delaware</option>
+              <option>Florida</option><option>Georgia</option><option>Hawaii</option><option>Idaho</option>
+              <option>Illinois</option><option>Indiana</option><option>Iowa</option><option>Kansas</option>
+              <option>Kentucky</option><option>Louisiana</option><option>Maine</option><option>Maryland</option>
+              <option>Massachusetts</option><option>Michigan</option><option>Minnesota</option><option>Mississippi</option>
+              <option>Missouri</option><option>Montana</option><option>Nebraska</option><option>Nevada</option>
+              <option>New Hampshire</option><option>New Jersey</option><option>New Mexico</option><option>New York</option>
+              <option>North Carolina</option><option>North Dakota</option><option>Ohio</option><option>Oklahoma</option>
+              <option>Oregon</option><option>Pennsylvania</option><option>Rhode Island</option><option>South Carolina</option>
+              <option>South Dakota</option><option>Tennessee</option><option>Texas</option><option>Utah</option>
+              <option>Vermont</option><option>Virginia</option><option>Washington</option><option>West Virginia</option>
+              <option>Wisconsin</option><option>Wyoming</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="decomp">Do you currently offer spinal decompression?</label>
+            <select id="decomp" name="decomp" required>
+              <option value="" disabled selected>Select one</option>
+              <option>Yes — established program</option>
+              <option>Yes — just getting started</option>
+              <option>No — interested in adding it</option>
+              <option>No — not sure if it's right for my practice</option>
+            </select>
+          </div>
+
+          <button type="submit" class="submit-btn">Request My Analysis &rarr;</button>
+
+        </form>
+
+        <p class="form-disclaimer">No obligation. No sales pressure. Just an honest look at your program.</p>
+      </div>
+    </div>
+
+  </div>
+
+</body>
+</html>
